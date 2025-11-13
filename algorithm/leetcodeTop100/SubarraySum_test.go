@@ -1,6 +1,8 @@
 package leetcodetop100
 
-func subarraySum(nums []int, target int) int {
+type SubArraySum struct{}
+
+func (s *SubArraySum) subarraySum(nums []int, target int) int {
 	prefixMap := make(map[int]int)
 	prefixMap[0] = 1
 	prefixSum := make([]int, len(nums))
@@ -15,6 +17,26 @@ func subarraySum(nums []int, target int) int {
 			count += value
 		}
 		prefixMap[prefixSum[i]]++
+	}
+	return count
+}
+
+func (s *SubArraySum) subArraySum2(nums []int, target int) int {
+	preArr := make([]int, len(nums))
+	for index := range nums {
+		if index == 0 {
+			preArr[index] = nums[index]
+		} else {
+			preArr[index] = nums[index] + preArr[index-1]
+		}
+	}
+	count := 0
+	remember := make(map[int]int)
+	remember[0] = 1
+	for index := range preArr {
+		remember[preArr[index]]++
+		diff := preArr[index] - target
+		count += remember[diff]
 	}
 	return count
 }
